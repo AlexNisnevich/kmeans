@@ -1,0 +1,25 @@
+<html>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="kmeans.js"></script>
+</head>
+<body>
+	<button id="reset" disabled>Reset</button>
+	<button id="generateRandomSamples">Generate Random Samples</button>
+	<button id="generateClusteredSamples">Generate Clustered Samples</button>
+	<button id="initializeKMeans" disabled>Initialize k-Means</button>
+	<button id="calculateAssignments" disabled>Calculate Assignments</button>
+	<button id="updateMeans" disabled>Update Means</button>
+	<button id="runKMeans" disabled>Run k-Means</button>
+	<br />
+	<canvas id="canvas" width="600" height="600" style="float: left; margin-right: 20px;"></canvas>
+	<div style="float: left;">
+		<p># Random samples: <input id="numRandomSamples" type="text" size="3" value="100" /></p>
+		<p># Clusters: <input id="numClusters" type="text" size="3" value="10" /></p>
+		<p>Cluster size: <input id="clusterSizeMin" type="text" size="3" value="5" /> - <input id="clusterSizeMax" type="text" size="3" value="15" /></p>
+		<p>Cluster radius: <input id="clusterRadiusMin" type="text" size="3" value="30" /> - <input id="clusterRadiusMax" type="text" size="3" value="70" /></p>
+		<p># Means: <input id="numMeans" type="text" size="3" value="10" /></p>
+		<p>Run interval: <input id="runInterval" type="text" size="3" value="1000" /> ms</p>
+	</div>
+</body>
+</html>
