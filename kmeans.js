@@ -74,14 +74,12 @@ function KMeans() {
 			var clusterX = getRandomInt(maxRadius + 10, this.width - maxRadius - 10);
 			var clusterY = getRandomInt(maxRadius + 10, this.height - maxRadius - 10);
 			var clusterSize = getRandomInt(minSize, maxSize);
-			var clusterRadius = getRandomInt(minRadius, maxRadius);
+			var clusterStd = getRandomInt(minRadius, maxRadius);
 
 			for (var j = 0; j < clusterSize; j++) {
-				var r = getRandomArbitary(0, clusterRadius);
-				var theta = getRandomArbitary(0, 2 * Math.PI);
-
-				var x = clusterX + r * Math.cos(theta);
-				var y = clusterY + r * Math.sin(theta);
+				var gaussian = rnd_bmt();
+				var x = clusterX + gaussian[0] * clusterStd;
+				var y = clusterY + gaussian[1] * clusterStd;
 				this.samples.push([x, y]);
 			}
 		}
@@ -125,11 +123,13 @@ function KMeans() {
 				return (assignments[i_sample] == i_mean);
 			});
 
-			means[i_mean] = [0, 0];
-			$.each(cluster, function (i, sample) {
-				means[i_mean][0] += sample[0] / cluster.length;
-				means[i_mean][1] += sample[1] / cluster.length;
-			})
+			if (cluster.length > 0) {
+				means[i_mean] = [0, 0];
+				$.each(cluster, function (i, sample) {
+					means[i_mean][0] += sample[0] / cluster.length;
+					means[i_mean][1] += sample[1] / cluster.length;
+				});
+			}
 		});
 
 		this.refreshCanvas();
@@ -199,4 +199,27 @@ function getRandomArbitary (min, max) {
 
 function getRandomInt (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// for generating random gaussians
+// http://www.protonfish.com/jslib/boxmuller.shtml
+function rnd_bmt() {
+	var x = 0, y = 0, rds, c;
+
+	// Get two random numbers from -1 to 1.
+	// If the radius is zero or greater than 1, throw them out and pick two new ones
+	// Rejection sampling throws away about 20% of the pairs.
+	do {
+	x = Math.random()*2-1;
+	y = Math.random()*2-1;
+	rds = x*x + y*y;
+	}
+	while (rds == 0 || rds > 1)
+
+	// This magic is the Box-Muller Transform
+	c = Math.sqrt(-2*Math.log(rds)/rds);
+
+	// It always creates a pair of numbers. I'll return them in an array.
+	// This function is quite efficient so don't be afraid to throw one away if you don't need both.
+	return [x*c, y*c];
 }
